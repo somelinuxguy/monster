@@ -1,5 +1,5 @@
 # monster
-Learning python3, I decided to write a quick game
+Learning python3, I decided to write a quick game to teach myself.
 
 # How to play:
 There is a haunted house, five stories tall and five rooms per floor, 0 indexes because computers.
@@ -9,9 +9,6 @@ Your task is to find the Last Will and Testament of grandma. You must search the
 To run the code just install python3 and then: `python3 monster.py` should have you on your way.
 
 # To Do
-Move the monster every turn. To do that, ensure the monster and the treasure are not in the same space or the Monster will overwrite the treasure. 
-
-Eliminate the current "unwinnable" edge case where the monster overwrites the treasure on initialization.
 
 Make it 1 to 5 instead of 0-4 because humans don't start counting with 0 even though they should.
 
@@ -22,3 +19,4 @@ I also split some things in to functions, better to do that than write the same 
 
 Lists are fun, lists of lists are more fun.
 
+I also just learned classes and class methods. Neat!

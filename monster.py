@@ -1,4 +1,37 @@
+import sys
+import time
 from random import randint
+
+class Monster(object):
+  def __init__(self, row, col):
+    self.row = row
+    self.col = col
+  
+  def clear(self,board):
+    board[self.row][self.col] = "O"
+    return board
+
+  def move(self,board):
+    newrow = random_row(board)
+    newcol = random_col(board)
+    # if treasure were an object, this would be simpler    
+    if board[newrow][newcol] == "T":  
+     Monster.move(board) 
+    else:
+      self.row = newrow
+      self.col = newcol
+      board[newrow][newcol] = "M"
+    return board
+
+def directions():
+  print("Explore the Haunted Mansion!")
+  print("You have to find grandma's Last Will and Testament!")
+  print()
+  print("Explore by choosing a floor, then opening a door.")
+  print()
+  print("If you open the door with The Monster, you will die!")
+  print("The Monster moves to a random room every turn.")
+  print("-------------------------------------")
 
 def print_board(board):
   for row in board:
@@ -20,7 +53,7 @@ def check_valid(row, col):
     return False
 
   if (int(row) not in range(5)) or (int(col) not in range(5)):
-    print("Invalid Entry. Your house has 5 floors and five rooms, enter 0 to 4.")
+    print("Invalid Entry. Enter 0 to 4.")
     return False
   else:
     return True
@@ -39,12 +72,17 @@ def check_treasure(row, col):
         print("What you seek is not in this room. Keep looking.\n")
 
 def lose():
-  print("You are eaten. LOSE!")
+  print("**ROAR** This room has a Monster! You are eaten!")
   quit()
 
 def win():
-  print("You found the Last Will and Testament of Grandma, you get all her stuff!! WIN!")
+  print("You found the Last Will and Testament, you inherit a billion dollars!! WIN!")
   quit()
+
+def spinning_cursor():
+    while True:
+        for cursor in '|/-\\':
+            yield cursor
 
 # Main  
 # Let's initialize the game board
@@ -54,28 +92,37 @@ dead = False
 for x in range(0, 5):
   board.append(["O"] * 5)
 
-# Place the first Monster
-board[random_row(board)][random_col(board)] = "M"
-# Now place the treasure
+# Make an instance of Monster class named Monster
+# feed him some random coords to initialize with
+# save his position on the board
+monster = Monster(random_row(board), random_col(board))
+board[monster.row][monster.col] = "M"
+
+# Now place the treasure.
 board[random_row(board)][random_col(board)] = "T"
 
-print("You find yourself in a five story haunted mansion, five rooms per floor.")
-print("You have to find grandma's Last Will and Testament!")
-print("If you open the door with a monster, you will die.")
-print("The monster moves to a random room every turn.\n\n")
-
-# Uncomment to debug
-# print_board(board)
+directions()
+spinner = spinning_cursor()
 
 # loop forever.
 # at some point I might write another function
 # that returns dead = True but for now that is not needed.
 while not dead:
-  row = input("Which floor? ")
-  col = input("Which room ? ")
+  # print_board(board) #uncomment the print to see the board and cheat/debug
+  row = input("Which floor (0 to 4) : ")
+  col = input("Which room  (0 to 4) : ")
   if check_valid(row, col):
-    print("Opening the door.")
+    print("Opening the door  ", end='')
+    for _ in range(20):
+      sys.stdout.write(next(spinner))
+      sys.stdout.flush()
+      time.sleep(0.1)
+      sys.stdout.write('\b')
+    print()
     row = int(row)
     col = int(col)
     check_monster(row,col)
     check_treasure(row,col)
+# if we drop through to this point, the player found an empty room. Move the monster.
+  monster.clear(board)
+  monster.move(board)
