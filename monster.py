@@ -14,14 +14,32 @@ class Monster(object):
   def move(self,board):
     newrow = random_row(board)
     newcol = random_col(board)
-    # if treasure were an object, this would be simpler    
     if board[newrow][newcol] == "T":  
-     Monster.move(board) 
+      monster.move(board) 
     else:
       self.row = newrow
       self.col = newcol
       board[newrow][newcol] = "M"
     return board
+
+class Treasure(object):
+  def __init__(self,row,col):
+    self.row = row
+    self.col = col
+
+# detect presence of Monster and don't overwrite it.
+  def place(self,board):
+    row = random_row(board)
+    col = random_col(board)
+    if board[row][col] == "M":  
+      treasure.place(board) 
+    else:
+      self.row = row
+      self.col = col
+      board[row][col] = "T"
+    return board
+
+
 
 def directions():
   print("Explore the Haunted Mansion!")
@@ -98,17 +116,16 @@ for x in range(0, 5):
 monster = Monster(random_row(board), random_col(board))
 board[monster.row][monster.col] = "M"
 
-# Now place the treasure.
-board[random_row(board)][random_col(board)] = "T"
+# Same for treature. Initialize the object, then place it.
+treasure = Treasure(random_row(board), random_col(board))
+treasure.place(board)
 
 directions()
 spinner = spinning_cursor()
 
 # loop forever.
-# at some point I might write another function
-# that returns dead = True but for now that is not needed.
 while not dead:
-  # print_board(board) #uncomment the print to see the board and cheat/debug
+  print_board(board) #uncomment the print to see the board and cheat/debug
   row = input("Which floor (0 to 4) : ")
   col = input("Which room  (0 to 4) : ")
   if check_valid(row, col):
